@@ -1,0 +1,96 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User List App</title>
+    <style>
+        body { background-color:  #867474;
+            font-family: sans-serif; margin: 20px; line-height: 1.6; }
+        .user-item { 
+            margin-bottom: 10px; 
+            list-style: none; 
+            border-bottom: 1px solid #746565; 
+            padding: 8px; 
+            display: flex; 
+            align-items: center; 
+        }
+        #userInput{
+            height:1cm;
+            width:10.5cm;
+            border-radius:0.2cm;
+        }
+        span { flex-grow: 1; }
+        button { margin-left: 5px; cursor: pointer; padding: 5px 10px; }
+        .edit-btn { background-color: #e0f7fa; border: 1px solid #00acc1; }
+        .delete-btn { background-color: #ffebee; border: 1px solid #e53935; color: #b71c1c; }
+    </style>
+</head>
+<body>
+
+    <h2>User List</h2>
+    <input type="text" id="userInput" placeholder="Enter name...">
+    <button id="addBtn">Add User</button>
+
+    <ul id="userList"></ul>
+
+    <script>
+        const input = document.getElementById("userInput");
+        const addBtn = document.getElementById("addBtn");
+        const userList = document.getElementById("userList");
+
+        // Function to create and add a user
+        addBtn.addEventListener('click', () => {
+            const name = input.value.trim();
+
+            if (name === "") {
+                alert("Please enter a name!");
+                return;
+            }
+
+            const li = document.createElement("li");
+            li.className = 'user-item';
+
+            const span = document.createElement('span');
+            span.textContent = name;
+
+            const editBtn = document.createElement('button');
+            editBtn.textContent = 'Edit';
+            editBtn.className = 'edit-btn';
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = 'Delete';
+            deleteBtn.className = 'delete-btn';
+
+            // Using .append() to add multiple nodes at once
+            li.append(span, editBtn, deleteBtn);
+            userList.append(li);
+
+            // Clear input and refocus
+            input.value = "";
+            input.focus();
+        });
+
+        // Event Delegation for Edit and Delete actions
+        userList.addEventListener('click', (event) => {
+            const target = event.target;
+            const parentLi = target.parentElement;
+
+            // Handle Delete
+            if (target.classList.contains('delete-btn')) {
+                parentLi.remove(); // Fixed: removed the double dot
+            }
+
+            // Handle Edit
+            if (target.classList.contains('edit-btn')) {
+                const span = parentLi.querySelector('span');
+                const newName = prompt("Update name:", span.textContent);
+                
+                if (newName !== null && newName.trim() !== "") {
+                    span.textContent = newName.trim();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
